@@ -1,7 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
-
 #ifndef PRATICOTRABALHO_CENTRALELETRICA_H
 #define PRATICOTRABALHO_CENTRALELETRICA_H
 
@@ -12,9 +8,9 @@
 class CentralEletrica : public Edificio{
 
 public:
-    CentralEletrica() : Edificio("elec",0,100/*kg de carvao*/){
+    CentralEletrica(int day) : Edificio("elec",0,100/*kg de carvao*/,day){}
 
-    };
+    void newDay() override;
 };
 
 
