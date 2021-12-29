@@ -1,6 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
 
 #ifndef PRATICOTRABALHO_ZONA_H
 #define PRATICOTRABALHO_ZONA_H
@@ -11,74 +8,42 @@
 #include <sstream>
 #include <cstring>
 #include "Trabalhadores.h"
+#include "Mineiro.h"
+#include "Lenhador.h"
+#include "Operario.h"
 #include "Edificio.h"
 #include "MinaCarvao.h"
 #include "MinaFerro.h"
 #include "Bateria.h"
 #include "Fundicao.h"
-#include "Mineiro.h"
-#include "Lenhador.h"
-#include "Operario.h"
+
 
 using namespace std;
+
+class Recursos;
 
 
 class Zona {
 
     vector<Trabalhadores* > TrabalhadoresDaZona;
     vector<Edificio* > EdificioDaZona;
+    Recursos* recursos;
     int N_edificios;
     const string tipo;
-    int Ferro;
-    int BarraAco;
-    int Carvao;
-    int Madeira;
-    int VigasMadeira;
-    int Eletricidade;
     int day=1;
 
 public:
 
-    Zona(const string t) : tipo(t){
+    Zona(const string t)  : tipo(t){
         N_edificios=0;
-        Ferro=0;
-        BarraAco=0;
-        Carvao=0;
-        Madeira=0;
-        VigasMadeira=0;
-        Eletricidade=0;
     };
 
-    bool addTrabalhador(const string &t, const int money, const int dia) { //Recebe tipo e quantidade de dinheiro do Player
-
-        if(t=="miner" && money >= 10){
-            TrabalhadoresDaZona.push_back(new Mineiro(dia));//Push_back no vetor Trabalhadores da Zona(Pasto)
-            auto e = (TrabalhadoresDaZona.end()-1);
-            cout << (*e)->getTipo() <<" contratado" << " por " << (*e)->getPrice() <<"\n" <<endl;
-            (*e)->entrarNaZona(this);//Trabalhador vai passar a apontar para a Zona em que se encontra
-            return true;//Para que seja retirado dinheiro ao Player
-
-        } else if(t=="len" && money >= 20){
-            TrabalhadoresDaZona.push_back(new Lenhador(dia));
-            auto e = (TrabalhadoresDaZona.end()-1);
-            cout << (*e)->getTipo() <<" contratado" << " por " << (*e)->getPrice() <<"\n" <<endl;
-            (*e)->entrarNaZona(this);
-            return true;
-
-
-        } else if(t=="oper" && money >= 15){
-            TrabalhadoresDaZona.push_back(new Operario(dia));
-            auto e = (TrabalhadoresDaZona.end()-1);
-            cout << (*e)->getTipo() <<" contratado" << " por " << (*e)->getPrice() <<"\n" <<endl;
-            (*e)->entrarNaZona(this);
-            return true;
-
-        } else {
-            cout << "Tipo de trabalhador indisponivel(oper/miner/len), ou dinheiro insuficiente." << endl;
-            return false;//Não é retirado dinheiro
-        }
-
+    void pointToRecursos(Recursos* abc){
+        recursos = abc;
     }
+
+    void addTrabalhador(const string &t, const int dia);
+
 
     int workerCost(const string t){ //Recebe o tipo de Trabalhador contratado e dá return do preço do mesmo
                                     //que será descontado no dinheiro do Player
@@ -92,24 +57,7 @@ public:
         return 0;
     }
 
-    void addEdificio(const string &t) {
-
-        if(N_edificios==0) {
-            if (t == "mnC") {
-                EdificioDaZona.push_back(new MinaCarvao());
-            } else if (t == "mnF") {
-                EdificioDaZona.push_back(new MinaFerro());
-            } else if (t == "bat") {
-                EdificioDaZona.push_back(new Bateria());
-            } else if (t == "fun") {
-                EdificioDaZona.push_back(new Fundicao());
-            } else {
-                cout << "Tipo de Edificio nao existente." << endl;
-            }
-        } else {
-            cout << "Esta Zona ja contem um Edificio." << endl;
-        }
-    }
+    void addEdificio(const string &t);
 
     void moveToHere(Trabalhadores* abc){//Pega num determinado Worker do pasto e mete-o nesta zona
                                         //recebemo-lo em ponteiro e fazemos push_back e ele passa a apontar
@@ -165,16 +113,43 @@ public:
         }
     }
 
-    void newDay(){//Dar inicio ao Trabalhado dos Trabalhadores da Zona, é chamada uma função Virtual..
+    void removeEdificio(){//Para o Pantano
+        for(auto e = EdificioDaZona.begin(); e<EdificioDaZona.end(); e++){
+                delete *e;
+                EdificioDaZona.erase(e);
+        }
+        N_edificios--;
+    }
+
+    virtual void newDay(){//Dar inicio ao Trabalhado dos Trabalhadores da Zona, é chamada uma função Virtual..
         day++;
         for(auto e = TrabalhadoresDaZona.begin(); e<TrabalhadoresDaZona.end(); e++){
             (*e)->newWorkDay();
         }
+        for(auto e = EdificioDaZona.begin(); e<EdificioDaZona.end(); e++){
+            (*e)->newDay();
+        }
     }
 
-    void fireWorker(const int i){//Caso um Trabalhador de demita num dia de Trabalho
+    void produzir(){
+        for(auto e = EdificioDaZona.begin(); e<EdificioDaZona.end(); e++){
+            (*e)->produzir();
+        }
+    }
+
+    void fireAllWorkers(){//Para o pantano
+        int tam = TrabalhadoresDaZona.size();
+        for(int i = 0; i < tam; i++){
+            auto e = TrabalhadoresDaZona[i];
+            cout << (*e).getTipo() << " - " << (*e).getId() << " ,pediu demissao na Zona -> " << getTipoZona() << endl;
+            delete e;
+        }
+        TrabalhadoresDaZona.clear();
+    }
+
+    void fireWorker(const int id){//Caso um Trabalhador de demita num dia de Trabalho
         for(auto e = TrabalhadoresDaZona.begin(); e<TrabalhadoresDaZona.end(); e++){
-            if((*e)->getId()==i){
+            if((*e)->getId()==id){
                 delete *e;
                 TrabalhadoresDaZona.erase(e);
             }
@@ -193,22 +168,53 @@ public:
         return tipo;
     }
 
-    string getAsString() {
+    virtual string getAsString() {
         ostringstream oss;
         oss << endl;
+        oss << "Dia: " <<getDay() << endl;
         oss << "Tipo de Zona: " << getTipoZona() << endl;
         oss << "Trabalhadores da Zona:" << endl;
         for(auto e = TrabalhadoresDaZona.begin(); e<TrabalhadoresDaZona.end(); e++) {
             oss <<  "   Id: " << (*e)->getId() << "." << (*e)->getContractDay() << " - " << (*e)->getTipo() << endl;
         }
-        oss << "Numero de edificios: " << getNumEdificios() << endl;
-        oss << endl;
+        oss << "Edificio na Zona: " << endl;
+        for(auto e = EdificioDaZona.begin(); e<EdificioDaZona.end(); e++) {
+            oss <<  "   Tipo - " << (*e)->getTipo() << endl;
+        }
         return oss.str();
     }
 
     int getDay() const{
         return day;
     }
+
+
+    int getNumbLen() const{
+        int count=0;
+        for(auto e = TrabalhadoresDaZona.begin(); e < TrabalhadoresDaZona.end(); e++){
+            if((*e)->getTipo() == "len"){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    bool haveMiner() const{
+        for(auto e = TrabalhadoresDaZona.begin(); e < TrabalhadoresDaZona.end(); e++){
+            if((*e)->getTipo() == "miner"){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void addMadeira(const int add);
+
+    void addFerro(const float add);
+
+    void addCarvao(const int add);
+
+
 
 
 
