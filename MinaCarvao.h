@@ -1,7 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
-
 #ifndef PRATICOTRABALHO_MINACARVAO_H
 #define PRATICOTRABALHO_MINACARVAO_H
 
@@ -10,11 +6,15 @@
 
 class MinaCarvao : public Edificio{
 
-    const float ProbCollap = .1;
+     float ProbCollap = 10;
 public:
-    MinaCarvao() : Edificio("mnC",10/*e uma viga*/,100/*de Carvao*/){
+    MinaCarvao(int day) : Edificio("mnC",10/*e uma viga*/,100/*de Carvao*/,day){}
 
-    };
+    void newDay() override;
+
+    void produzir() override;
+
+
 };
 
 
