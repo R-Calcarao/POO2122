@@ -1,7 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
-
 #ifndef PRATICOTRABALHO_MINEIRO_H
 #define PRATICOTRABALHO_MINEIRO_H
 
