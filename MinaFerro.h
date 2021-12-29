@@ -1,7 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
-
 #ifndef PRATICOTRABALHO_MINAFERRO_H
 #define PRATICOTRABALHO_MINAFERRO_H
 
@@ -10,10 +6,13 @@
 
 class MinaFerro : public Edificio{
 
-    const float ProbCollap = .1;
+     float ProbCollap = 15;
 public:
-    MinaFerro() : Edificio("mnF",15/*e uma viga*/,100/*kg de ferro*/){};
+    MinaFerro(int day) : Edificio("mnF",15/*e uma viga*/,100/*kg de ferro*/, day){};
+
+    void newDay() override;
+
+    void produzir() override;
+
+
 };
-
-
-#endif //PRATICOTRABALHO_MINAFERRO_H
