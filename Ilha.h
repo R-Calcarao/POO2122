@@ -1,11 +1,8 @@
-//
-// Created by ACER on 23/12/2021.
-//
-
 #ifndef PRATICOTRABALHO_ILHA_H
 #define PRATICOTRABALHO_ILHA_H
 
 #include "Zona.h"
+#include "Recursos.h"
 #include <vector>
 
 using namespace std;
@@ -16,9 +13,9 @@ class Ilha {
     const int linhas;
     const int colunas;
     vector<vector<Zona*>> ilhaBi;
+    Recursos* recursos;
     bool find=false;
     int dia=1;
-    int money=100;
 
 
 public:
@@ -35,10 +32,8 @@ public:
         for(int i=0; i<ilhaBi.size(); i++) {
             for(int j=0; j<ilhaBi[i].size();j++) {
                 if (ilhaBi[i][j]->getTipoZona() == "pas") {
+                    ilhaBi[i][j]->addTrabalhador(t,getDay());
                     find = true;
-                    if(ilhaBi[i][j]->addTrabalhador(t,money,dia)) {
-                        money = money - ilhaBi[i][j]->workerCost(t);
-                    }
                 }
                 if(find){break;}
             }
@@ -54,6 +49,18 @@ public:
                 ilhaBi[i][j]->newDay();
             }
         }
+    }
+
+    void produzir() {
+        for(int i=0; i<ilhaBi.size(); i++) {
+            for(int j=0; j<ilhaBi[i].size();j++) {
+                ilhaBi[i][j]->produzir();
+            }
+        }
+    }
+
+    int getDay() const{
+        return dia;
     }
 
     void moveWorker(const int id,const int linha, const int coluna) {
@@ -83,8 +90,11 @@ public:
         cout << ilhaBi[linha-1][coluna-1]->getAsString();
     }
 
-    void
-    showIlha();
+    void addEdi(const string tipo,const int linha, const int coluna) {
+        ilhaBi[linha-1][coluna-1]->addEdificio(tipo);
+    }
+
+    void showIlha();
 
 };
 
