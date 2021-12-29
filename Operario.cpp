@@ -1,7 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
-
 #include "Operario.h"
 #include "Zona.h"
 
@@ -15,7 +11,7 @@ void Operario::newWorkDay() {
             giveZonaRef()->fireWorker(getId());
         }
 
-    } else if(getContractDay()-10 >= 0){
+    } else if(getContractDay()-10 >= 0 && giveZonaRef()->getTipoZona() != "pas"){
         bool TrueFalse = (rand() % 100) < probDemi;
         if(TrueFalse){
             cout << "Vou me embora da zona: " << giveZonaRef()->getTipoZona() << ", sou o " << getTipo() << " de id: " <<
