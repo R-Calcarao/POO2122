@@ -1,7 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
-
 #include "Ilha.h"
 #include "Deserto.h"
 #include "Floresta.h"
@@ -17,6 +13,8 @@ using namespace std;
 
 
 Ilha::Ilha(const int l, const int c) : linhas(l), colunas(c) {
+    recursos = new Recursos();
+
     srand(time(0));
 
     for(int i=0; i<linhas; i++) {
@@ -51,13 +49,30 @@ Ilha::Ilha(const int l, const int c) : linhas(l), colunas(c) {
         }
         ilhaBi.push_back(v1);
     }
+
+    for(int i=0; i<ilhaBi.size(); i++) {
+        for(int j=0; j<ilhaBi[i].size();j++) {
+            ilhaBi[i][j]->pointToRecursos(recursos);
+        }
+    }
 }
 
 void Ilha::showIlha() { //Corre a ilha
-cout << "Dinheiro: " << money << endl;
+cout << endl;
+cout << "Dia: " << getDay() << endl;
+cout << "Dinheiro: " << recursos->getMoney() << " euros" << endl;
+cout << "Madeira: " << recursos->getMadeira() << " kg" << endl;
+cout << "Ferro: " << recursos->getFerro() << " kg" << endl;
+cout << "Carvao: " << recursos->getCarvao() << " kg" << endl;
+cout << "Barras de Aco: " << recursos->getBarraAco() << endl;
+cout << "Vigas de Madeira: " << recursos->getVigaMadeira() << endl;
+cout << "Eletricidade: " << recursos->getEletricidade() << endl;
+cout << endl;
+
     for(int i=0; i<ilhaBi.size(); i++) {
         for(int j=0; j<ilhaBi[i].size();j++) {
-            cout << ilhaBi[i][j]->getTipoZona() << " - " << ilhaBi[i][j]->NumbWorkers()<< " ";
+            cout << ilhaBi[i][j]->getTipoZona() << " - " << ilhaBi[i][j]->NumbWorkers()<< " / "
+            << ilhaBi[i][j]->getNumEdificios() <<" ";
         }
         cout << endl;
     }
