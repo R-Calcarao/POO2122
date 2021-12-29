@@ -1,5 +1,6 @@
 #include "Zona.h"
 #include "Recursos.h"
+#include "CentralEletrica.h"
 
 void Zona::addTrabalhador(const string &t,const int dia) { //Recebe tipo e quantidade de dinheiro do Player
 
@@ -41,14 +42,43 @@ void Zona::addFerro(const float add) {
     recursos->addFerro(add);
 }
 
+void Zona::addCarvao(const int add) {
+    recursos->addCarvao(add);
+}
+
 void Zona::addEdificio(const string &t) {
 
     if(N_edificios==0) { //Se a zona n tiver edificios
 
-        if (t == "mnC") {
+        if (t == "mnC" && getTipoZona()=="mnt") {
+            if(recursos->getVigaMadeira() >= 20) {
+                recursos->withdrawVigas(20);
+                EdificioDaZona.push_back(new MinaCarvao(getDay()));
+                cout << "Mina de Carvao construida em " << getTipoZona() << endl;
+            } else { //Se n houver vigas suficientes
+                int rest = 20 - recursos->getVigaMadeira();
+                cout << "Nao tem vigas de madeira suficientes, faltam-lhe " << rest << " vigas." << endl;
+                rest = rest*20;
+                cout << "O restante custa: " << rest << " euros" << endl;
+                cout << "Pretende pagar as vigas restantes com dinheiro?(S/N): ";
+                char resp;
+                cin >> resp;
+                if(resp == 'S'){
+                    if(recursos->getMoney() >= rest){
+                        recursos->withdrawVigas(recursos->getVigaMadeira()); //Zerar as vigas umas vez que n há suf...
+                        recursos->withdrawMoney(rest);
+                        EdificioDaZona.push_back(new MinaCarvao(getDay()));
+                        cout << "Mina de Carvao construida em " << getTipoZona() << endl;
+                        N_edificios++;
+                    } else {
+                        cout << "Nao tem dinheiro suficiente..." << endl;
+                    }
+                }
+            }
+        } else if (t == "mnC") {
             if(recursos->getVigaMadeira() >= 10) {
                 recursos->withdrawVigas(10);
-                EdificioDaZona.push_back(new MinaCarvao());
+                EdificioDaZona.push_back(new MinaCarvao(getDay()));
                 cout << "Mina de Carvao construida em " << getTipoZona() << endl;
             } else { //Se n houver vigas suficientes
                 int rest = 10 - recursos->getVigaMadeira();
@@ -62,8 +92,33 @@ void Zona::addEdificio(const string &t) {
                     if(recursos->getMoney() >= rest){
                         recursos->withdrawVigas(recursos->getVigaMadeira()); //Zerar as vigas umas vez que n há suf...
                         recursos->withdrawMoney(rest);
-                        EdificioDaZona.push_back(new MinaCarvao());
+                        EdificioDaZona.push_back(new MinaCarvao(getDay()));
                         cout << "Mina de Carvao construida em " << getTipoZona() << endl;
+                        N_edificios++;
+                    } else {
+                        cout << "Nao tem dinheiro suficiente..." << endl;
+                    }
+                }
+            }
+        } else if (t == "mnF" && getTipoZona()=="mnt") {
+            if(recursos->getVigaMadeira() >= 20) {
+                recursos->withdrawVigas(20);
+                EdificioDaZona.push_back(new MinaFerro(getDay()));
+                cout << "Mina de Ferro construida em " << getTipoZona() << endl;
+            } else {// Se n houver vigas sufientes
+                int rest = 20 - recursos->getVigaMadeira();
+                cout << "Nao tem vigas de madeira suficientes, faltam-lhe " << rest << " vigas." << endl;
+                rest = rest*20;
+                cout << "O restante custa: " << rest << " euros" << endl;
+                cout << "Pretende pagar as vigas restantes com dinheiro?(S/N): ";
+                char resp;
+                cin >> resp;
+                if(resp == 'S'){
+                    if(recursos->getMoney() >= rest){
+                        recursos->withdrawVigas(recursos->getVigaMadeira()); //Zerar as vigas umas vez que n há suf...
+                        recursos->withdrawMoney(rest);
+                        EdificioDaZona.push_back(new MinaFerro(getDay()));
+                        cout << "Mina de Ferro construida em " << getTipoZona() << endl;
                         N_edificios++;
                     } else {
                         cout << "Nao tem dinheiro suficiente..." << endl;
@@ -73,7 +128,7 @@ void Zona::addEdificio(const string &t) {
         } else if (t == "mnF") {
             if(recursos->getVigaMadeira() >= 10) {
                 recursos->withdrawVigas(10);
-                EdificioDaZona.push_back(new MinaFerro());
+                EdificioDaZona.push_back(new MinaFerro(getDay()));
                 cout << "Mina de Ferro construida em " << getTipoZona() << endl;
             } else {// Se n houver vigas sufientes
                 int rest = 10 - recursos->getVigaMadeira();
@@ -87,7 +142,7 @@ void Zona::addEdificio(const string &t) {
                     if(recursos->getMoney() >= rest){
                         recursos->withdrawVigas(recursos->getVigaMadeira()); //Zerar as vigas umas vez que n há suf...
                         recursos->withdrawMoney(rest);
-                        EdificioDaZona.push_back(new MinaFerro());
+                        EdificioDaZona.push_back(new MinaFerro(getDay()));
                         cout << "Mina de Ferro construida em " << getTipoZona() << endl;
                         N_edificios++;
                     } else {
@@ -96,13 +151,20 @@ void Zona::addEdificio(const string &t) {
                 }
             }
         } else if (t == "bat") {
-            EdificioDaZona.push_back(new Bateria());
+            EdificioDaZona.push_back(new Bateria(getDay()));
             cout << "Bateria construida em " << getTipoZona() << endl;
             N_edificios++;
         } else if (t == "fun") {
             cout << "Fundicao construida em " << getTipoZona() << endl;
-            EdificioDaZona.push_back(new Fundicao());
+            EdificioDaZona.push_back(new Fundicao(getDay()));
             N_edificios++;
+        } else if (t == "elec") {
+            if(recursos->getMoney()>=15){
+                cout << "Central Eletrica construida em " << getTipoZona() << endl;
+                EdificioDaZona.push_back(new CentralEletrica(getDay()));
+                N_edificios++;
+            }
+
         } else {
             cout << "Tipo de Edificio nao existente." << endl;
         }
