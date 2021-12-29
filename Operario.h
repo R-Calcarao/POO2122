@@ -1,7 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
-
 #ifndef PRATICOTRABALHO_OPERARIO_H
 #define PRATICOTRABALHO_OPERARIO_H
 
