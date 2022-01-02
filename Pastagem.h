@@ -1,6 +1,3 @@
-//
-// Created by ACER on 23/12/2021.
-//
 
 #ifndef PRATICOTRABALHO_PASTAGEM_H
 #define PRATICOTRABALHO_PASTAGEM_H
@@ -13,7 +10,7 @@ class Pastagem : public Zona{
 
     const string tipo;
 public:
-    Pastagem() : Zona("pas"){};
+    Pastagem(int linha,int coluna) : Zona("pas",linha,coluna){};
 
 };
 
