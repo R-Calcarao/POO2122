@@ -1,3 +1,5 @@
+
+
 #ifndef PRATICOTRABALHO_FLORESTA_H
 #define PRATICOTRABALHO_FLORESTA_H
 
@@ -9,9 +11,11 @@ class Floresta : public Zona {
     int N_arvores;
     int Madeira=0;//É produzida por Lenhadores
     int Cap_Max=100;
+    bool produce = false;
+    bool aux = false;
 public:
 
-    Floresta() : Zona("flr"){
+    Floresta(int linha,int coluna) : Zona("flr",linha,coluna){
         srand(time(0));
         N_arvores = (rand()%21)+20;
     };
@@ -20,8 +24,17 @@ public:
         return N_arvores;
     }
 
+    bool HaveProduceThisDay() override{
+        Zona::HaveflrAround();
+        return produce;
+    }
+
     void newDay() override {
         Zona::newDay();
+        if(aux) {
+            aux = false;
+            produce = false;
+        }
         if(getDay()%2 == 0 && N_arvores < Cap_Max && getNumEdificios() == 0) {//Só crescem arvores se n existirem edi.
             N_arvores++;
         } else { //Se existirem edificios morre uma arvore por cada dia que passa
@@ -32,7 +45,13 @@ public:
                 N_arvores--;
             }
         }
-        addMadeira(getNumbLen()*1);
+        if(N_arvores > 0){
+            addMadeira((getNumbLen()-getNumbLenResting())*1);
+            if(getNumbLen()-getNumbLenResting()*1 > 0){
+                produce = true;
+                aux = true;
+            }
+        }
     }
 
     string getAsString() override{
