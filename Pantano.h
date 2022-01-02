@@ -1,6 +1,4 @@
-//
-// Created by ACER on 23/12/2021.
-//
+
 
 #ifndef PRATICOTRABALHO_PANTANO_H
 #define PRATICOTRABALHO_PANTANO_H
@@ -11,7 +9,9 @@ class Pantano : public Zona{
 
     const string tipo;
 public:
-    Pantano() : Zona("pnt") {};
+    Pantano(int linha,int coluna) : Zona("pnt",linha,coluna) {};
+
+
 
 };
 
