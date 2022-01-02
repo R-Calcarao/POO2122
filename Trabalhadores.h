@@ -1,6 +1,4 @@
-//
-// Created by ACER on 23/12/2021.
-//
+
 
 #ifndef PRATICOTRABALHO_TRABALHADORES_H
 #define PRATICOTRABALHO_TRABALHADORES_H
@@ -30,7 +28,9 @@ public:
 
     virtual void newWorkDay(){}
 
-    virtual void letsWork(){}
+    //virtual void letsWork(){}
+
+    virtual bool Resting(){}; //Saber se o Lenhador esta a trabalhar
 
     int getId() const {
         return id;
