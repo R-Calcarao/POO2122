@@ -1,4 +1,5 @@
 
+
 #ifndef PRATICOTRABALHO_ZONA_H
 #define PRATICOTRABALHO_ZONA_H
 
@@ -21,22 +22,29 @@
 using namespace std;
 
 class Recursos;
-
+class Ilha;
 
 class Zona {
 
     vector<Trabalhadores* > TrabalhadoresDaZona;
     vector<Edificio* > EdificioDaZona;
     Recursos* recursos;
+    Ilha* ilha;
     int N_edificios;
+    int linha;
+    int coluna;
     const string tipo;
     int day=1;
 
 public:
 
-    Zona(const string t)  : tipo(t){
+    Zona(const string t,const int linha, const int coluna)  : tipo(t),linha(linha),coluna(coluna){
         N_edificios=0;
     };
+
+    void pointToIlha(Ilha* abc){
+        ilha = abc;
+    }
 
     void pointToRecursos(Recursos* abc){
         recursos = abc;
@@ -131,6 +139,8 @@ public:
         }
     }
 
+    virtual bool HaveProduceThisDay(){}
+
     void produzir(){
         for(auto e = EdificioDaZona.begin(); e<EdificioDaZona.end(); e++){
             (*e)->produzir();
@@ -168,6 +178,15 @@ public:
         return tipo;
     }
 
+    string getTipoEdificio() const{
+        if(N_edificios == 1){
+            auto e = (EdificioDaZona.end()-1);
+            return (*e)->getTipo();
+        } else {
+            return " ";
+        }
+    }
+
     virtual string getAsString() {
         ostringstream oss;
         oss << endl;
@@ -188,11 +207,20 @@ public:
         return day;
     }
 
-
     int getNumbLen() const{
         int count=0;
         for(auto e = TrabalhadoresDaZona.begin(); e < TrabalhadoresDaZona.end(); e++){
             if((*e)->getTipo() == "len"){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    int getNumbLenResting() const{
+        int count=0;
+        for(auto e = TrabalhadoresDaZona.begin(); e < TrabalhadoresDaZona.end(); e++){
+            if((*e)->getTipo() == "len" && (*e)->Resting()){
                 count++;
             }
         }
@@ -208,11 +236,38 @@ public:
         return false;
     }
 
+    bool haveOper() const{
+        for(auto e = TrabalhadoresDaZona.begin(); e < TrabalhadoresDaZona.end(); e++){
+            if((*e)->getTipo() == "oper"){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int getMadeira()const;
+
     void addMadeira(const int add);
+
+    void withdrawMadeira(const int cost);
+
+    void addBarraAco(const int add);
+
+    void withdrawCarvao(const float cost);
+
+    int getFerro()const;
 
     void addFerro(const float add);
 
+    void withdrawFerro(const float cost);
+
+    int getCarvao()const;
+
     void addCarvao(const int add);
+
+    bool HavemnAround();
+
+    bool HaveflrAround();
 
 
 
