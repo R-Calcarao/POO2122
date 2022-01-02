@@ -1,3 +1,5 @@
+
+
 #ifndef PRATICOTRABALHO_EDIFICIO_H
 #define PRATICOTRABALHO_EDIFICIO_H
 
@@ -44,7 +46,6 @@ public:
         return zona;
     }
 
-    string flag();
 
      virtual void newDay(){}
 
@@ -54,3 +55,4 @@ public:
 
 
 #endif //PRATICOTRABALHO_EDIFICIO_H
+
