@@ -1,8 +1,9 @@
+
 #include "Operario.h"
 #include "Zona.h"
 
 void Operario::newWorkDay() {
-    if(giveZonaRef()->getTipoZona()=="mnt" && getContractDay()-10 >= 0){
+    if(giveZonaRef()->getTipoZona()=="mnt" && giveZonaRef()->getDay() - getContractDay() >= 10){
         int p = probDemi + (probDemi*0.05);
         bool TrueFalse = (rand() % 100) < p;
         if(TrueFalse){
@@ -11,7 +12,7 @@ void Operario::newWorkDay() {
             giveZonaRef()->fireWorker(getId());
         }
 
-    } else if(getContractDay()-10 >= 0 && giveZonaRef()->getTipoZona() != "pas"){
+    } else if(giveZonaRef()->getDay() - getContractDay() >= 10 && giveZonaRef()->getTipoZona() != "pas"){
         bool TrueFalse = (rand() % 100) < probDemi;
         if(TrueFalse){
             cout << "Vou me embora da zona: " << giveZonaRef()->getTipoZona() << ", sou o " << getTipo() << " de id: " <<
