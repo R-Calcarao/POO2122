@@ -1,3 +1,8 @@
+//
+// Created by ACER on 23/12/2021.
+//
+
+#include "Ilha.h"
 #include "Zona.h"
 #include "Recursos.h"
 #include "CentralEletrica.h"
@@ -34,8 +39,28 @@ void Zona::addTrabalhador(const string &t,const int dia) { //Recebe tipo e quant
     }
 }
 
+int Zona::getMadeira() const{
+    return recursos->getMadeira();
+}
+
 void Zona::addMadeira(const int add) {
     recursos->addMadeira(add);
+}
+
+void Zona::withdrawMadeira(const int cost) {
+    recursos->withdrawMadeira(cost);
+}
+
+void Zona::addBarraAco(const int add) {
+    recursos->addBarraAco(add);
+}
+
+int Zona::getFerro() const{
+    return recursos->getFerro();
+}
+
+int Zona::getCarvao() const {
+    return recursos->getCarvao();
 }
 
 void Zona::addFerro(const float add) {
@@ -44,6 +69,30 @@ void Zona::addFerro(const float add) {
 
 void Zona::addCarvao(const int add) {
     recursos->addCarvao(add);
+}
+
+void Zona::withdrawCarvao(const float cost) {
+    recursos->withdrawCarvao(cost);
+}
+
+void Zona::withdrawFerro(const float cost) {
+    recursos->withdrawFerro(cost);
+}
+
+bool Zona::HavemnAround() {
+    if(ilha->HaveMnAround(linha,coluna)){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Zona::HaveflrAround() {
+    if(ilha->HaveflrAround(linha,coluna)){
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void Zona::addEdificio(const string &t) {
@@ -154,17 +203,29 @@ void Zona::addEdificio(const string &t) {
             EdificioDaZona.push_back(new Bateria(getDay()));
             cout << "Bateria construida em " << getTipoZona() << endl;
             N_edificios++;
-        } else if (t == "fun") {
-            cout << "Fundicao construida em " << getTipoZona() << endl;
-            EdificioDaZona.push_back(new Fundicao(getDay()));
-            N_edificios++;
+        } else if (t == "fun" && getTipoZona()=="mnt") {
+            if(recursos->getMoney() >= 20) {
+                recursos->withdrawMoney(20);
+                cout << "Fundicao construida em " << getTipoZona() << endl;
+                EdificioDaZona.push_back(new Fundicao(getDay()));
+                N_edificios++;
+            } else {
+                cout << "Dinheiro insuficiente..." << endl;
+            }
+        } else if(t == "fun"){
+            if(recursos->getMoney() >= 10){
+                recursos->withdrawMoney(10);
+                EdificioDaZona.push_back(new Fundicao(getDay()));
+                N_edificios++;
+            } else {
+                cout << "Dinheiro insuficiente..." << endl;
+            }
         } else if (t == "elec") {
             if(recursos->getMoney()>=15){
                 cout << "Central Eletrica construida em " << getTipoZona() << endl;
                 EdificioDaZona.push_back(new CentralEletrica(getDay()));
                 N_edificios++;
             }
-
         } else {
             cout << "Tipo de Edificio nao existente." << endl;
         }
