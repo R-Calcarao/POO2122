@@ -1,3 +1,5 @@
+
+
 #ifndef PRATICOTRABALHO_FUNDICAO_H
 #define PRATICOTRABALHO_FUNDICAO_H
 
@@ -8,9 +10,13 @@
 class Fundicao : public Edificio{
 
 public:
-    Fundicao(int day) : Edificio("fun",0,0,day){
+    Fundicao(int day) : Edificio("fun",0,0,day){};
 
-    };
+    void newDay() override;
+
+    void produzir() override;
+
+
 
 };
 
