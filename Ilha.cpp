@@ -1,3 +1,5 @@
+
+
 #include "Ilha.h"
 #include "Deserto.h"
 #include "Floresta.h"
@@ -23,27 +25,27 @@ Ilha::Ilha(const int l, const int c) : linhas(l), colunas(c) {
             int f = (rand() % 6) + 1;
             switch (f) {
                 case 1:
-                    v1.push_back(new Deserto());
+                    v1.push_back(new Deserto(i,j));
                     break;
 
                 case 2:
-                    v1.push_back(new Floresta());
+                    v1.push_back(new Floresta(i,j));
                     break;
 
                 case 3:
-                    v1.push_back(new Pastagem());
+                    v1.push_back(new Pastagem(i,j));
                     break;
 
                 case 4:
-                    v1.push_back(new Montanha());
+                    v1.push_back(new Montanha(i,j));
                     break;
 
                 case 5:
-                    v1.push_back(new Pantano());
+                    v1.push_back(new Pantano(i,j));
                     break;
 
                 case 6:
-                    v1.push_back(new ZonaX());//Composição -> Zonas fazem parte da ilha
+                    v1.push_back(new ZonaX(i,j));//Composição -> Zonas fazem parte da ilha
                     break;
             }
         }
@@ -53,6 +55,7 @@ Ilha::Ilha(const int l, const int c) : linhas(l), colunas(c) {
     for(int i=0; i<ilhaBi.size(); i++) {
         for(int j=0; j<ilhaBi[i].size();j++) {
             ilhaBi[i][j]->pointToRecursos(recursos);
+            ilhaBi[i][j]->pointToIlha(this);
         }
     }
 }
@@ -72,8 +75,9 @@ cout << endl;
     for(int i=0; i<ilhaBi.size(); i++) {
         for(int j=0; j<ilhaBi[i].size();j++) {
             cout << ilhaBi[i][j]->getTipoZona() << " - " << ilhaBi[i][j]->NumbWorkers()<< " / "
-            << ilhaBi[i][j]->getNumEdificios() <<" ";
+            << ilhaBi[i][j]->getNumEdificios() <<"     ";
         }
+        cout << endl;
         cout << endl;
     }
     cout <<endl;
