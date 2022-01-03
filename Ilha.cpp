@@ -1,5 +1,4 @@
 
-
 #include "Ilha.h"
 #include "Deserto.h"
 #include "Floresta.h"
@@ -67,17 +66,59 @@ cout << "Dinheiro: " << recursos->getMoney() << " euros" << endl;
 cout << "Madeira: " << recursos->getMadeira() << " kg" << endl;
 cout << "Ferro: " << recursos->getFerro() << " kg" << endl;
 cout << "Carvao: " << recursos->getCarvao() << " kg" << endl;
-cout << "Barras de Aco: " << recursos->getBarraAco() << endl;
+cout << "Barras de Aco: " << recursos->getBarraAco() << " kg" <<endl;
 cout << "Vigas de Madeira: " << recursos->getVigaMadeira() << endl;
-cout << "Eletricidade: " << recursos->getEletricidade() << endl;
+cout << "Eletricidade: " << recursos->getEletricidade() << " KWh" <<endl;
 cout << endl;
-
-    for(int i=0; i<ilhaBi.size(); i++) {
+    int z = 0;
+    cout<<"------┬------------------------"<<endl;
+    for(int i=0; i<ilhaBi.size();) {
         for(int j=0; j<ilhaBi[i].size();j++) {
-            cout << ilhaBi[i][j]->getTipoZona() << " - " << ilhaBi[i][j]->NumbWorkers()<< " / "
-            << ilhaBi[i][j]->getNumEdificios() <<"     ";
+           /* cout << ilhaBi[i][j]->getTipoZona() << " - " << ilhaBi[i][j]->NumbWorkers()<< " / "
+            << ilhaBi[i][j]->getNumEdificios() <<"  |   ";*/
+            if(z == 0){
+                if(j == 0){
+                    cout<<"| ";
+                }
+                cout << ilhaBi[i][j]->getTipoZona()<<" | ";
+            }
+            if(z == 1){
+                if(j == 0){
+                    cout<<"| ";
+                }
+                if(ilhaBi[i][j]->NumbWorkers()>= 0 && ilhaBi[i][j]->NumbWorkers() <= 9){
+                    cout << ilhaBi[i][j]->NumbWorkers()<<"   | ";
+                }
+                if(ilhaBi[i][j]->NumbWorkers()>= 10 && ilhaBi[i][j]->NumbWorkers() <= 99){
+                    cout << ilhaBi[i][j]->NumbWorkers()<<"  | ";
+                }
+                if(ilhaBi[i][j]->NumbWorkers()>= 100 && ilhaBi[i][j]->NumbWorkers() <= 999){
+                    cout << ilhaBi[i][j]->NumbWorkers()<<" | ";
+                }
+            }
+            if(z == 2){
+                if(j == 0){
+                    cout<<"| ";
+                }
+                if(ilhaBi[i][j]->getNumEdificios()>= 0 && ilhaBi[i][j]->getNumEdificios() <= 9){
+                    cout << ilhaBi[i][j]->getNumEdificios()<<"   | ";
+                }
+                if(ilhaBi[i][j]->getNumEdificios()>= 10 && ilhaBi[i][j]->getNumEdificios() <= 99){
+                    cout << ilhaBi[i][j]->getNumEdificios()<<"  | ";
+                }
+                if(ilhaBi[i][j]->getNumEdificios()>= 100 && ilhaBi[i][j]->getNumEdificios() <= 999){
+                    cout << ilhaBi[i][j]->getNumEdificios()<<" | ";
+                }
+            }
+            if(j == (ilhaBi[i].size() - 1)){
+                z++;
+            }
+            if(z == 3){
+                i++;
+                z=0;
+                cout<<endl<<"-------------------------------";
+            }
         }
-        cout << endl;
         cout << endl;
     }
     cout <<endl;
