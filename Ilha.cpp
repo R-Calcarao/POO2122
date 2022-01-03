@@ -71,7 +71,7 @@ cout << "Vigas de Madeira: " << recursos->getVigaMadeira() << endl;
 cout << "Eletricidade: " << recursos->getEletricidade() << " KWh" <<endl;
 cout << endl;
     int z = 0;
-    cout<<"------┬------------------------"<<endl;
+    cout<<"-------------------------------"<<endl;
     for(int i=0; i<ilhaBi.size();) {
         for(int j=0; j<ilhaBi[i].size();j++) {
            /* cout << ilhaBi[i][j]->getTipoZona() << " - " << ilhaBi[i][j]->NumbWorkers()<< " / "
